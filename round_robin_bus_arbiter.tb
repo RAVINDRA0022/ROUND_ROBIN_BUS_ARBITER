@@ -1,0 +1,32 @@
+`timescale 1ns / 1ps
+
+
+module round_robin_bus_arbiter_tb();
+  reg clk; 
+  reg rst;
+  reg [3:0] req;
+  wire [3:0] grant;
+     round_robin_bus_arbiter uut (.clk(clk), .rst(rst), .req(req), .grant(grant));
+         
+         always #10 clk = ~clk;
+          
+          initial 
+            begin  
+              rst = 0;
+              clk = 0;
+              req = 4'b0;
+           #10 rst = 1 ;
+           @(negedge clk) req = 4'b1111;
+            @(negedge clk) req = 4'b0011; 
+            @(negedge clk) req = 4'b1000;
+            @(negedge clk) req = 4'b0110; 
+             @(negedge clk) req = 4'b1101;
+              @(negedge clk) req = 4'b1110;
+               @(negedge clk) req = 4'b1110;
+                @(negedge clk) req = 4'b0011;
+           #10 rst = 0;
+           #100 $finish;
+        end 
+      
+       
+endmodule
